@@ -62,6 +62,29 @@ class Language(models.Model):
                                         name = 'language_name_case_insensitive_unique', 
                                         violation_error_message = 'Language Already Exists.')]
 
+# Create 'Author' Model
+class Author(models.Model):
+
+    # Attributes
+    first_name = models.CharField(max_length=200, help_text='Please Enter Author\'s First Name')
+    last_name = models.CharField(max_length=200, help_text='Please Enter Authos\'s Last Name')
+
+    date_of_birth = models.DateField()
+    date_of_death = models.DateField(null=True, blank=True)
+
+    # author_name = f'{first_name} {last_name}'
+
+    # Functions
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
+
+    def get_absolute_url(self):
+        return reverse("author_detail", args=[str(self.id)])
+    
+        # Meta Sub-Class
+    class Meta:
+        ordering = ['first_name']
+
 # Create 'Book' Model
 class Book(models.Model):
     
@@ -78,13 +101,18 @@ class Book(models.Model):
                             help_text='13 Characters <a href="https://isbnsearch.org/">ISBN Search </a>')
     
 
-    # Creating the Connections between Book and Genre - Language
+    # Creating the Connections between Book and Genre - Language - Author
     genre = models.ManyToManyField(Genre, help_text='Select one or many Genre for the Book')
 
     language = models.ForeignKey(Language, 
                                  on_delete=models.RESTRICT,
                                  help_text='Select a Language for the Book',
                                  null=True)
+
+    author = models.ForeignKey(Author,
+                               on_delete=models.RESTRICT,
+                               help_text='Select a Author for the Book',
+                               null=True)
 
     # Functions of Book
     def __str__(self):
