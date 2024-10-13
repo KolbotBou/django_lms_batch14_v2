@@ -34,10 +34,33 @@ class Genre(models.Model):
         # Use Constraint to Prevent Duplicated Genre.Name Field (e.g. Science, Science, science)
         constraints = [UniqueConstraint(Lower('name'),
                 name = 'genre_name_case_insensitive_unique',
-                violation_error_message = 'Genre Already Exists.'
+                violation_error_message = 'Genre Already Exists'
                 )
         ]
 
+# Create 'Language' Model
+class Language(models.Model):
+
+    # Attributes of Language
+    language = models.CharField(max_length=100,
+                                unique=True,
+                                help_text='Please Enter a Language')
+
+    # Functions of Language
+    def __str__(self):
+        return self.language
+    
+    def get_absolute_url(self):
+        return reverse("language_detail", args=[str(self.id)])
+    
+        # Meta Sub-Class
+    class Meta:
+        ordering = ['language']
+
+        # Use Constraint to Prevent Duplicated Language
+        constraints = [UniqueConstraint(Lower('language'),
+                                        name = 'language_name_case_insensitive_unique', 
+                                        violation_error_message = 'Language Already Exists.')]
 
 # Create 'Book' Model
 class Book(models.Model):
@@ -55,8 +78,13 @@ class Book(models.Model):
                             help_text='13 Characters <a href="https://isbnsearch.org/">ISBN Search </a>')
     
 
-    # Creating the Connections between Book and Genre - 
-    genre = models.ManyToManyField(Genre, help_text='Select one or many Genre for the Book.')
+    # Creating the Connections between Book and Genre - Language
+    genre = models.ManyToManyField(Genre, help_text='Select one or many Genre for the Book')
+
+    language = models.ForeignKey(Language, 
+                                 on_delete=models.RESTRICT,
+                                 help_text='Select a Language for the Book',
+                                 null=True)
 
     # Functions of Book
     def __str__(self):
@@ -116,7 +144,7 @@ class BookCopy(models.Model):
                               default='m',
                               help_text='Book Availability' )
 
-    # Creating the Connections between Book and Genre
+    # Creating the Connections between BookCopy and Book
     book = models.ForeignKey(Book,
                              on_delete=models.RESTRICT,
                              null=True)
