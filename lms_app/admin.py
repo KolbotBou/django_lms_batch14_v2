@@ -1,11 +1,12 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Genre, Book, BookCopy
+from .models import Genre, Book, BookCopy, Language
 
 admin.site.register(Genre)
 # admin.site.register(BookCopy)
 # admin.site.register(Book)
+admin.site.register(Language)
 
 
 # To Modify Data Displayed on Admin Dashboard - Adding More Columns
