@@ -1,4 +1,62 @@
-<!DOCTYPE html>
+{% extends "base_generic.html" %}
+{% comment %} This has to be the Start of the Code or It Wont Work {% endcomment %}
+
+{% block content %}
+<h2>Welcome to Library Management System - Batch 14</h2>
+<br>
+<h5>The Library has the following record counts:</h5>
+
+{% comment %} 
+From the Values we Render from Models in Views.py,
+we can show and display those on the Webpage by adding below lines
+{% endcomment %}
+
+{% comment %} THIS IS THE NORMAL ONE WITHOUT BOOTSTRAP UI DESIGN
+
+<p>Total Number of Book: {{num_books}}</p>
+<p>Total Number of Book Copied: {{num_book_copies}}</p>
+<p>Total Genres: {{num_genres}}</p>
+<p>Total Authors: {{num_authors}}</p>
+<p>Total Languages: {{num_languages}}</p>
+
+{% endcomment %}
+
+{% comment %} USING BOOTSTRAP FOR UI DESIGN {% endcomment %}
+<ul class="list-group">
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      Total Number of Books:
+      <span class="badge text-bg-primary rounded-pill"> {{num_books}} </span>
+    </li>
+
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      Total Number of Book Copied:
+      <span class="badge text-bg-primary rounded-pill"> {{num_book_copies}} </span>
+    </li>
+
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      Total Genres:
+      <span class="badge text-bg-primary rounded-pill"> {{num_genres}} </span>
+    </li>
+    
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      Total Authors:
+      <span class="badge text-bg-primary rounded-pill"> {{num_authors}} </span>
+    </li>
+
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      Total Languages:
+      <span class="badge text-bg-primary rounded-pill"> {{num_languages}} </span>
+    </li>
+
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      Book Available to Borrow:
+      <span class="badge text-bg-primary rounded-pill"> {{num_book_available}} </span>
+    </li>
+  </ul>
+
+{% endblock content %}
+
+{% comment %} <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,4 +66,4 @@
 <body>
     <h1>Hello World</h1>
 </body>
-</html>
+</html> {% endcomment %}

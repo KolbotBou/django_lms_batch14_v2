@@ -72,10 +72,9 @@ class Author(models.Model):
     date_of_birth = models.DateField()
     date_of_death = models.DateField(null=True, blank=True)
 
-    # author_name = f'{first_name} {last_name}'
-
     # Functions
-    def __str__(self):
+    def __str__(self):      
+        # This Function will be how Data appears for ForeignKey - Selection Choices and how it appear on Admin Dashboard
         return f'{self.first_name} {self.last_name}'
 
     def get_absolute_url(self):
