@@ -84,6 +84,10 @@ class Author(models.Model):
     class Meta:
         ordering = ['first_name']
 
+    # Creating this Function to use in HTML - so Full Name can be Display in Author List, and can be Click to Access Author Detail
+    def display_name(self):
+        return f'{self.first_name} {self.last_name}'
+
 # Create 'Book' Model
 class Book(models.Model):
     
@@ -132,7 +136,7 @@ class Book(models.Model):
 
     # To Have the Header appeared as 'Genre'
     display_genre.short_description = 'Genre'
-    
+
     # Subclass - Meta for Book
     class Meta:
         ordering = ['id']

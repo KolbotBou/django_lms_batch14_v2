@@ -1,0 +1,41 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+    <h2>Book List View</h2>
+
+    {% comment %}  {% endcomment %}
+    {% if book_list %}
+        <ul>
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">ISBN</th>
+                    <th scope="col">Genre</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% comment %}  {% endcomment %}
+                  {% for book in book_list %}
+                  <tr>
+                    {% comment %}  {% endcomment %}
+                    <th scope="row"> {{forloop.counter}} </th>
+                    <td> <a href=" {{book.get_absolute_url}} "> {{book.title}} </a> </td>
+                    <td> {{book.display_genre}} </td>
+                    <td> {{book.isbn}} </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+
+        </ul>
+
+    {% else %}
+        <p>There is no Book in Library.</p>
+
+    {% endif %}
+
+{% endblock content %}
+

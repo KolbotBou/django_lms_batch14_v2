@@ -16,12 +16,14 @@
   <body>
     <div class="container">
       <div class="row">
-        <div class="col-sm-2">
+        <div class="col-sm-2 bg-light text-light">
           {% block sidebar%}
-            <ul class="sidebar-nav">
-              <li><a href="{% url 'index' %}">Home</a></li>
-              <li><a href="">All books</a></li>
-              <li><a href="">All authors</a></li>
+            <ul class="sidebar-nav nav flex-column">
+              <li class="nav-item"><a class="nav-item" href="{% url 'index' %}">Home</a></li>
+              <li class="nav-item"><a class="nav-item" href="{% url 'books' %}">All Books</a></li>
+              <li class="nav-item"><a class="nav-item" href="{% url 'authors' %}">All Authors</a></li>
+              <li class="nav-item"><a class="nav-item" href="{% url 'genres' %}">All Genres</a></li>
+              <li class="nav-item"><a class="nav-item" href="{% url 'languages' %}">All Languages</a></li>
             </ul>
           {% endblock %}
         </div>
