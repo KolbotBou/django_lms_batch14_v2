@@ -1,0 +1,32 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+    <h2>Language List View</h2>
+
+    {% if language_list %}
+            <ul>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Language</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for language in language_list %}
+                        <tr>
+                          <th scope="row"> {{forloop.counter}} </th>
+                          <td> {{language.language}} </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </ul>
+
+    {% else %}
+        <p>Data Not Available.</p>
+    {% endif %}
+
+{% endblock content %}

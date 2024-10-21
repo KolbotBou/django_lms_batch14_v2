@@ -1,0 +1,32 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+    <h2>Genre List View</h2>
+
+    {% if genre_list %}
+            <ul>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Genre</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for genre in genre_list %}
+                        <tr>
+                          <th scope="row"> {{forloop.counter}} </th>
+                          <td> {{genre.name}} </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </ul>
+
+    {% else %}
+        <p>Data Not Available.</p>
+    {% endif %}
+
+{% endblock content %}
