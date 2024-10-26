@@ -4,7 +4,6 @@
 
     <h2>Author List View</h2>
 
-    {% comment %}  {% endcomment %}
     {% if author_list %}
         <ul>
             <table class="table">
@@ -17,10 +16,8 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {% comment %}  {% endcomment %}
                   {% for author in author_list %}
                   <tr>
-                    {% comment %}  {% endcomment %}
                     <th scope="row"> {{forloop.counter}} </th>
                     <td> <a href=" {{author.get_absolute_url}} "> {{author.display_name}} </a> </td>
                     <td> {{author.date_of_birth}} </td>

@@ -4,7 +4,7 @@
 
     <h2>Book List View</h2>
 
-    {% comment %}  {% endcomment %}
+    {% comment %} Check if the object 'book_list' - based off Data of Book Model - exists  {% endcomment %}
     {% if book_list %}
         <ul>
             <table class="table">
@@ -17,10 +17,10 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {% comment %}  {% endcomment %}
+                  {% comment %} for Looping Through all Item/Data in book_list - based off Book Model {% endcomment %}
                   {% for book in book_list %}
                   <tr>
-                    {% comment %}  {% endcomment %}
+                      {% comment %} forloop.counter is for setting Number Counter 1, 2, 3... {% endcomment %}
                     <th scope="row"> {{forloop.counter}} </th>
                     <td> <a href=" {{book.get_absolute_url}} "> {{book.title}} </a> </td>
                     <td> {{book.display_genre}} </td>
