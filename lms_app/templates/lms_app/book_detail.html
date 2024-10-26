@@ -10,5 +10,80 @@
 <p><strong> ISBN: </strong> {{book.isbn}} </p>
 <p><strong> Languages: </strong> {{book.language}} </p>
 
+<hr>
+
+<div style="margin-left: 30px;">
+    <h2>Book Copied</h2>
+
+{% comment %}     
+        <ul>
+
+            {% if book.bookcopy_set.all %}
+ 
+                        Use Below Function to "Reverse_Lookup" One-to-Many Relations to MANY-TO-ONE 
+                        Between Model - Bookinstance to Book
+    
+                {% for copied in book.bookcopy_set.all %}
+                            Code to Iterate across each copy/instance of Book to follow
+
+                            With FOR LOOP - the Value of {{copied}} will 
+                            return the __str__ Value as specified under its Model
+    
+                    <li> <a href="">{{ copied }}</a> </li>
+                {% endfor %}
+            
+            {% else %}
+                <p>There is <strong> NO Book Copied </strong> of: <strong> {{book.title}} </strong> </p>
+            {% endif %}
+                        
+        </ul>
+{% endcomment %}
+
+    {% if book.bookcopy_set.all %}
+
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Book Instance</th>
+                <th scope="col">Status</th>
+                <th scope="col">Due Back Date</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for copied in book.bookcopy_set.all %}
+                {% comment %} all data of each Book Copy will be looped {% endcomment %}
+                  <tr>
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td><a href=""> {{ copied }} </a></td>  {% comment %} the value of __str__ will be returned {% endcomment %}
+
+                    {% if copied.status == 'm' %}
+                    <td class = 'text-secondary'> Maintenance </td>  
+
+                    {% elif copied.status == 'o' %}
+                    <td class = 'text-danger'> On Loan </td>
+
+                    {% elif copied.status == 'a' %}
+                    <td class = 'text-success'> Available </td>
+
+                    {% elif copied.status == 'r' %}
+                    <td class = 'text-warning'> Reserved </td>
+
+                    {% endif %}
+
+                    <td> {{ copied.due_back }} </td>
+
+                  </tr>
+                {% endfor %}
+
+    {% else %}
+        <p>There is <strong> NO Book Copied </strong> of: <strong> {{book.title}} </strong> </p>
+    {% endif %}
+
+
+</div>
+
+
+
 {% endblock content %}
 
