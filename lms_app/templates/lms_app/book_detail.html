@@ -71,6 +71,10 @@
 
                     {% endif %}
 
+                    {% comment %} Using Django Template Tag to get Human-Readable Name of a model field that has choices {% endcomment %}
+                    {% comment %} {{get_FOO_display}} - FOO is the Model Field Name {% endcomment %}
+                    {% comment %} <td> {{ copied.get_status_display }} </td> {% endcomment %}
+
                     <td> {{ copied.due_back }} </td>
 
                   </tr>

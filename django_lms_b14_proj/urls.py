@@ -22,7 +22,10 @@ urlpatterns = [
 
     # Use include() to add paths from the catalog application
     # This is to Create an URL Path - which if accessed will open the URL File in APP DIRECTORY
-    path('library/', include('lms_app.urls'))
+    path('library/', include('lms_app.urls')),
+
+    # URL Path for USER AUTHENTICATION
+    path('accounts/', include('django.contrib.auth.urls'))
 ]
 
     # Adding URL Maps to redirect to MAIN URL - whenever the server is accessed
