@@ -1,0 +1,43 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    {% if form.errors %}
+    <p>Your Username and Password didn't match. Please try again.</p>
+    {% endif %}
+
+    {% if next %}
+        {% if user.is_authenticated %}
+            <p>Your Account doesn't have access to this page.
+               To proceed, please Login with an account that has access.</p>
+        
+        {% else %}
+            <p>Please Login to see this page.</p>
+        {% endif %}
+
+    {% endif %}
+
+    <form action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td>{{ form.username.label.tag }}</td>
+                <td>{{ form.username }}</td>
+            </tr>
+
+            <tr>
+                <td>{{ form.password.label.tag }}</td>
+                <td>{{ form.password }}</td>
+            </tr>
+        </table>
+
+        <input type="submit" value="Login">     {# The Input Type has to be 'Submit' for the button to RUN #}
+
+        {# WHY NEED THE BELOW? #}
+        <input type="hidden" name="next" value="{{next}}">
+    </form>
+
+    {# Assume the password_reset view in URLconf is SET UP #}
+    {# We can have this link below - to Go to Reset Password View #}
+    <p><a href="{% url 'password_reset' %}">Forgot your Password?</a></p>
+
+{% endblock content %}
