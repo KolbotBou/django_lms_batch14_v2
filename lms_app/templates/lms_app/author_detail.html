@@ -10,5 +10,32 @@
 <h4> Date of Birth: <strong> {{author.date_of_birth}} </strong></h4>
 <h4> Date of Death: <strong> {{author.date_of_death}} </strong></h4>
 
+<hr>
+
+<!-- Creating List of Books the Author Wrote -->
+<h4>His/Her Books</h4>
+
+        <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Book Title</th>
+            <th scope="col">Genre</th>
+            <th scope="col">Language</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for book in author.book_set.all %}
+        {% comment %} all data/attributes of each Book written by the author will be looped {% endcomment %}
+          <tr>
+            <th scope="row">{{forloop.counter}}</th>
+            <td><a href="{% url 'book_detail' book.pk %}"> {{ book.title }} </a></td>     <!--This book.title refers to each Book in the FOR LOOP, Not Book MODEL-->
+            <!--Have to also add book.pk otherwise template doesnt know which book to refer to (even if it has been defined in the urls.py)-->
+            <td> {{ book.display_genre }} </td>
+            <td> {{ book.language }} </td>
+          </tr>
+        {% endfor %}
+
+
 {% endblock content %}
-s
+

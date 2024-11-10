@@ -158,6 +158,7 @@ class BookCopy(models.Model):
 
     due_back = models.DateField(null=True, blank=True)
 
+    # Creating This 'Borrower' Datafield - so Logged In User could borrow a Book Copy
     borrower = models.ForeignKey(settings.AUTH_USER_MODEL,
                                  on_delete=models.SET_NULL,
                                  null=True)
@@ -195,3 +196,7 @@ class BookCopy(models.Model):
         # Meta Sub_Class
     class Meta:
         ordering = ['due_back', 'imprint']
+
+            # Adding this Permissions Code - To Have Custom Permission for Staff/Admin Account
+        permissions = [("can_mark_returned", "Set book as Returned"),
+                    ]
