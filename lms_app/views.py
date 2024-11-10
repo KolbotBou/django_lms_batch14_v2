@@ -70,3 +70,37 @@ class LanguageListView(generic.ListView):
 
 class GenreListView(generic.ListView):
     model = Genre
+
+# Import LoginRequiredMixin for Restriction - Generic Class Based View
+# So Only Logged In Users can View the Class (that used this LoginRequiredMixin)
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+# Create a View for Library Member User Group - To See all Their Borrowed Book when Logged In
+class BorrowedBooksByUserListView(LoginRequiredMixin,generic.ListView):
+    model = BookCopy
+
+    # Instead of using Default HTML File Name Convention (model_list.html) - we do as below to have Custom HTML Template File Name
+    template_name = 'lms_app/borrowed_books_by_user.html'
+
+    # Create this Function - so only Logged In Users' Related Objects are shown
+    def get_queryset(self):
+        return (
+            BookCopy.objects.filter(borrower = self.request.user).order_by('due_back')
+        )
+    
+
+# Import PermissionRequiredMixin for Logged In Staff Only View
+from django.contrib.auth.mixins import PermissionRequiredMixin
+
+# Create a View for Staff - To see All Borrowed Books from the Library
+class BorrowedBooksAllListView(PermissionRequiredMixin, generic.ListView):
+    model = BookCopy
+    
+    permission_required = 'lms_app.can_mark_returned'
+
+    template_name = 'lms_app/bookcopy_list_borrowed_all.html'
+
+    # Create this Function - so ONLY LOGGED IN STAFF can view this data
+    def get_queryset(self):
+        return (BookCopy.objects.filter(status__exact='o').order_by('due_back')
+                )

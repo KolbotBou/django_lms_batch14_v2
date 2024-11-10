@@ -1,0 +1,46 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h2>My Borrowed Book List</h2>
+
+    {% if bookcopy_list %}
+        <ul>
+            <table class="table align-middle">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Borrower</th>
+                    <th scope="col">Due Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% comment %} for Looping Through all Item/Data in book_list - based off Book Model {% endcomment %}
+                  {% for bookcopy in bookcopy_list %}
+                  <tr>
+                      {% comment %} forloop.counter is for setting Number Counter 1, 2, 3... {% endcomment %}
+                    <th scope="row"> {{forloop.counter}} </th>
+                    <td> <a href=" {{ bookcopy.book.get_absolute_url }} "> {{bookcopy.book.title}} </a> </td>
+
+                    {% comment %} To Give Permissions to Only STAFF/SUPERUSER - to See This Data {% endcomment %}
+                    <td>
+                        {% if perms.lms_app.can_mark_returned %}
+                            {{ bookcopy.borrower }}
+                        {% endif %}
+                    </td>
+                    
+                    {% comment %} We can have If condition in the class to format Text {% endcomment %}
+                    <td class=" {% if bookcopy.is_over_due %} text-danger {% else %} text-success {% endif %} " > {{bookcopy.due_back}} </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+
+        </ul>
+
+    {% else %}
+        <p>You have not Borrowed any Books.</p>
+
+    {% endif %}
+
+{% endblock content %}

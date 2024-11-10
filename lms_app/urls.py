@@ -52,4 +52,10 @@ urlpatterns = [
     path('languages/', views.LanguageListView.as_view(), name='languages'),
     path('genres/', views.GenreListView.as_view(), name='genres'),
 
+    # Create a URL for Library Member User Group - To See all Their Borrowed Book when Logged In
+    path('my-books/', views.BorrowedBooksByUserListView.as_view(), name='my-books'),
+
+    # Create a URL for Staff - To See all the Borrowed Books when Logged In
+    path('all-borrowed/',views.BorrowedBooksAllListView.as_view(), name='all-borrowed'),
+
 ]
