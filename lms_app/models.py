@@ -67,7 +67,7 @@ class Author(models.Model):
 
     # Attributes
     first_name = models.CharField(max_length=200, help_text='Please Enter Author\'s First Name')
-    last_name = models.CharField(max_length=200, help_text='Please Enter Authos\'s Last Name')
+    last_name = models.CharField(max_length=200, help_text='Please Enter Author\'s Last Name')
 
     date_of_birth = models.DateField()
     date_of_death = models.DateField(null=True, blank=True)
@@ -83,6 +83,10 @@ class Author(models.Model):
         # Meta Sub-Class
     class Meta:
         ordering = ['first_name']
+
+        # Adding Permission for Author Update and Creation
+        permissions = [("update_author", "Update Author"), ("create_author", "Create Author")
+                    ]
 
     # Creating this Function to use in HTML - so Full Name can be Display in Author List, and can be Click to Access Author Detail
     def display_name(self):

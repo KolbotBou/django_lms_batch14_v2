@@ -9,7 +9,10 @@
 <p><strong> Genre: </strong> {{book.display_genre}} </p>
 <p><strong> ISBN: </strong> {{book.isbn}} </p>
 <p><strong> Languages: </strong> {{book.language}} </p>
-
+<hr>
+<p><strong> Update Book? </strong> 
+  <button> <a href="{% url 'book-update' book.pk %}" style="text-decoration: none;" class='my-button'> 
+    YES </a> </button> </p>
 <hr>
 
 <div style="margin-left: 30px;">
@@ -48,6 +51,7 @@
                 <th scope="col">Book Instance</th>
                 <th scope="col">Status</th>
                 <th scope="col">Due Back Date</th>
+                <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -77,6 +81,9 @@
 
                     <td> {{ copied.due_back }} </td>
 
+                    <td><a href="{% url "bookcopy-update" copied.pk %}"> Update </a> &nbsp;
+                      |&nbsp; <a href="{% url "bookcopy-delete" copied.pk %}"> Remove </a></td>
+
                   </tr>
                 {% endfor %}
 
@@ -84,10 +91,25 @@
         <p>There is <strong> NO Book Copied </strong> of: <strong> {{book.title}} </strong> </p>
     {% endif %}
 
+<hr>
+<p><strong> Add More Book Instances? </strong> 
+  <button> <a href="{% url 'bookcopy-create' %}" style="text-decoration: none;" class='my-button'> 
+    YES </a> </button> </p>
 
 </div>
 
-
-
 {% endblock content %}
 
+{% block sidebar %}
+{{ block.super }}
+
+<ul class="sidebar-nav nav flex-column">
+  {% if perms.lms_app.change_book or perms.lms_app.delete_book %}
+  <hr>
+  <li class="nav-item text-dark" style="padding-left: 15px"> Action on Book </li>
+  <li class="nav-item"> <a class='nav-link' href="{% url "book-update" book.pk %}"> Update this Book </a> </li>
+  <li class="nav-item"><a class='nav-link text-danger' href="{% url "book-delete" book.pk %}"> Delete this Book </a></li>
+  {% endif %}
+</ul>
+
+{% endblock sidebar %}

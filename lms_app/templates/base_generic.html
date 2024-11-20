@@ -41,6 +41,8 @@
               <li class="nav-item"><a class="nav-link" href="{% url 'genres' %}"> <i class="fa-solid fa-bars-staggered"></i> All Genres </a></li>
               <li class="nav-item"><a class="nav-link" href="{% url 'languages' %}"> <i class="fa-solid fa-language"></i> All Languages </a></li>
 
+          {% endblock sidebar %}     
+
               <hr>
 
               {% comment %} Creating a Click Link on the SideBar for Log In / Log Out - Its URL is linked to the AUTH URLs Django Auto Created {% endcomment %}
@@ -63,21 +65,27 @@
 
               {% else %}
               <li class="nav-item"><a class='nav-link' href="{% url 'login' %}"> <i class="fa-solid fa-user-plus"></i> Log In </a></li>
-              {% endif %}
+              {% endif %}   
+       
+          <hr>
 
-              <hr>
+          <!--Create a Staff Only Clickable Link-->
+          {% if perms.lms_app.can_mark_returned or perms.lms_app.create_author or perms.lms_app.create_book %}
+          <!-- if user.is_staff can also be used in this case?? -->
+            <!-- Yes it works. 
+            user.is_staff is a broader check, simply verifying if the user is a staff member, 
+            while perms.app.action checks for specific permissions assigned to the user.
+            The specific permissions or actions can be assigned in Django Admin Dashboard over each User.-->
 
-              <!--Create a Staff Only Clickable Link-->
-              {% if perms.lms_app.can_mark_returned %}
-              <!-- if user.is_staff can also be used in this case?? -->
-              <li class="nav-item text-dark" style="padding-left: 15px"> Staff Only </li>
-              <li class="nav-item"><a class='nav-link' href="{% url 'all-borrowed' %}"> All Borrowed Book </a></li>
-
-              {% endif %}
-
+            <li class="nav-item text-dark" style="padding-left: 15px"> Staff Only </li>
+            <li class="nav-item"><a class='nav-link' href="{% url 'all-borrowed' %}"> All Borrowed Book </a></li>
+              
+            <li class="nav-item"><a class='nav-link' href="{% url 'author-create' %}"> Add New Author </a></li>
+            <li class="nav-item"><a class='nav-link' href="{% url 'book-create' %}"> Add New Book </a></li>
+          {% endif %}
+          
             </ul>
 
-          {% endblock %}
         </div>
 
         <div class="col-sm-10 ">

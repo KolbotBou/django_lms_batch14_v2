@@ -13,6 +13,7 @@
             <th scope="col">Book Title</th>
             <th scope="col">Due Back</th>
             <th scope="col">Borrower</th>
+            <th scope="col">Extend Return Date</th>
           </tr>
         </thead>
         <tbody>
@@ -24,6 +25,8 @@
             <td class="{% if bookcopied.is_over_due %} text-danger {% else %} text-success {% endif %}" > {{ bookcopied.due_back }} </td>
             
             <td> {% if user.is_staff %} {{ bookcopied.borrower }} {% endif %} </td>
+          
+            <td> <a href=" {% url "renew-book-librarian" bookcopied.pk %}"> Renew </a> </td>
           </tr>
             {% endfor %}
     

@@ -1,0 +1,17 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+    <h1>Renew Due Back Date: {{ book_copy.book.title }} </h1>
+    <p>Borrower: {{ book_copy.borrower }} </p>
+    <p {% if book_copy.is_over_due %} class='text-danger' {% endif %}> Due Date: {{ book_copy.due_back }} </p>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }} <!--Django Built-In Form Table-->
+        </table>
+        <input type="submit" value="Submit">
+    </form>
+
+{% endblock content %}

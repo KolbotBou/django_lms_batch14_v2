@@ -7,6 +7,41 @@ urlpatterns = [
     path('', views.index, name='index'), # Route is Main URL = /library/
     path('about-us/', views.about_us, name='about_us'), # Route is: /library/about-us/
 
+    path('languages/', views.LanguageListView.as_view(), name='languages'),
+    path('genres/', views.GenreListView.as_view(), name='genres'),
+
+    # Create a URL for Library Member User Group - To See all Their Borrowed Book when Logged In
+    path('my-books/', views.BorrowedBooksByUserListView.as_view(), name='my-books'),
+
+    # Create a URL for Staff - To See all the Borrowed Books when Logged In
+    path('all-borrowed/',views.BorrowedBooksAllListView.as_view(), name='all-borrowed'),
+
+    # Create a URL for Logged In Staff - To Renew Due Back Date
+    path('book/<uuid:pk>/renew/',views.renew_book_librarian, name='renew-book-librarian'),
+
+]
+
+
+# Author Model Related's Paths
+urlpatterns += [
+
+    # READ Operation
+    path('authors/', views.AuthorListView.as_view(), name='authors'), # URL Route is: main/authors/
+    path('author/<int:pk>', views.AuthorDetailView.as_view(), name= 'author_detail'), # URL Route is: main/authors/author.id
+
+    # UPDATE Operation
+    path('author/<int:pk>/update/', views.AuthorUpdate.as_view(), name='author-update'),
+
+    # CREATE Operation
+    path('author/create/', views.AuthorCreateView.as_view(), name='author-create'),
+
+    # DELETE Operation
+    path('author/<int:pk>/delete/', views.AuthorDeleteView.as_view(), name='author-delete'),
+]
+
+# Book Model's Related Paths
+urlpatterns += [
+    
     path('books/', views.BookListView.as_view(), name='books'), # URL Route is: main/books/
     
 # '''
@@ -46,16 +81,22 @@ urlpatterns = [
 # and HTML File as book_detail.html (e.g. Model Name = Book)
 # '''
 
-    path('authors/', views.AuthorListView.as_view(), name='authors'), # URL Route is: main/authors/
-    path('author/<int:pk>', views.AuthorDetailView.as_view(), name= 'author_detail'), # URL Route is: main/authors/author.id
+    # CREATE BOOK
+    path('book/create/', views.BookCreateView.as_view(), name='book-create'),
+    
+    # UPDATE BOOK
+    path('book/<int:pk>/update/', views.BookUpdate.as_view(), name='book-update'),
 
-    path('languages/', views.LanguageListView.as_view(), name='languages'),
-    path('genres/', views.GenreListView.as_view(), name='genres'),
+    # DELETE BOOK
+    path('book/<int:pk>/delete/', views.BookDeleteView.as_view(), name='book-delete'),
 
-    # Create a URL for Library Member User Group - To See all Their Borrowed Book when Logged In
-    path('my-books/', views.BorrowedBooksByUserListView.as_view(), name='my-books'),
 
-    # Create a URL for Staff - To See all the Borrowed Books when Logged In
-    path('all-borrowed/',views.BorrowedBooksAllListView.as_view(), name='all-borrowed'),
+# BookCopy's RELATED PATHS
+    # UPDATE
+    path('book/<uuid:pk>/update/', views.BookCopyUpdate.as_view(), name='bookcopy-update'),
+    # CREATE
+    path('bookcopy/create/', views.BookCopyCreateView.as_view(), name='bookcopy-create'),
+    # DELETE
+    path('book/<uuid:pk>/delete/', views.BookCopyDeleteView.as_view(), name='bookcopy-delete'),
 
 ]

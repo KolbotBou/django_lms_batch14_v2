@@ -45,29 +45,11 @@ def index(request):
 def about_us(request):
     return render(request,'about_us.html')
 
-
-# Creating a BookListView Class for showing the information on the URL - Using Generic View Class
-
-class BookListView(generic.ListView):
-    model = Book
-# Django will select all available Book's Data and Store it to a Variable book_list 
-# Basically: <model_name>_list
-
-class BookDetailView(generic.DetailView):
-    model = Book
-# Django will select all available Book's Data and Store it to a Variable <model_name>.<dictionrary>
-# Basically: <model_name>.datafield
-# DetailView Class is a Dictionary Datatype
-
-class AuthorListView(generic.ListView):
-    model = Author
-
-class AuthorDetailView(generic.DetailView):
-    model = Author
-
+""" Language MODEL VIEW """
 class LanguageListView(generic.ListView):
     model = Language
 
+""" GENRE MODEL VIEW """
 class GenreListView(generic.ListView):
     model = Genre
 
@@ -102,5 +84,146 @@ class BorrowedBooksAllListView(PermissionRequiredMixin, generic.ListView):
 
     # Create this Function - so ONLY LOGGED IN STAFF can view this data
     def get_queryset(self):
-        return (BookCopy.objects.filter(status__exact='o').order_by('due_back')
-                )
+        return (
+            BookCopy.objects.filter(status__exact='o').order_by('due_back')
+            )
+
+    # Function View - to Show Form for Due Back Date Renewal
+from django.contrib.auth.decorators import login_required, permission_required
+
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+
+# Import Created Form Class from forms.py
+from lms_app.forms import RenewBookForm
+
+from django.urls import reverse
+
+import datetime
+
+@login_required
+@permission_required('lms_app.can_mark_returned', raise_exception=True)
+
+def renew_book_librarian(request, pk):
+
+    # Function to View Specific Book by Librarian
+    book_copy = get_object_or_404(BookCopy, pk=pk)
+
+    # If The Form is SUBMITTED - The Form Data is Processed
+    if request.method == 'POST':
+
+        # Create a Form Object for Populating with user-submitted data from the POST request.
+        form = RenewBookForm(request.POST)
+
+        # Check if the Form is Valid
+        if form.is_valid():
+
+            # Process Data in form.clean_renewal_date -- and saving the UPDATED data to MODEL.due_back Field
+            book_copy.due_back = form.cleaned_data['renewal_date']    # book_copy is the INHERIT of BookCopy Model
+            book_copy.save()
+
+            # Redirect to another URL
+            return HttpResponseRedirect(reverse('all-borrowed'))
+        
+    # Create a Default Value Form
+    else:
+        proposed_renewal_date = datetime.date.today() + datetime.timedelta(days=21)
+        form = RenewBookForm(initial={'renewal_date': proposed_renewal_date})
+
+    renewal_bookcopy_payloads = {
+        'form': form,
+        'book_copy': book_copy,
+    }
+    return render(request, 'lms_app/book_renew_libratian.html', context=renewal_bookcopy_payloads)
+
+""" AUTHOR MODEL VIEW """
+class AuthorListView(generic.ListView):
+    model = Author
+
+class AuthorDetailView(generic.DetailView):
+    model = Author
+
+# AuthorUpdate Class
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse, reverse_lazy
+
+class AuthorUpdate(PermissionRequiredMixin, UpdateView):
+    model = Author
+    # Not Recommended to Add more Fields - Potential Security Risks
+    fields = '__all__'
+    permission_required = 'lms_app.update_author'    
+
+class AuthorCreateView(PermissionRequiredMixin, CreateView):
+    model = Author
+    fields = '__all__'
+    permission_required = 'lms_app.create_author'
+
+class AuthorDeleteView(PermissionRequiredMixin, DeleteView):
+    model = Author
+    permission_required = 'lms_app.delete_author'
+
+    success_url = reverse_lazy('authors')   
+    # This is used to redirect to after successfully handling a form submission
+    # reverse_lazy is a function in Django module that reverse (resolve) a URL pattern name into an actual URL.
+
+    # To Validate Author Delete Operation always go success_url which is Author List by Default
+    def form_valid(self, form):
+        try:
+            self.object.delete()
+            return HttpResponseRedirect(self.success_url)
+        except Exception as e:
+            return HttpResponseRedirect(
+                reverse('author-delete', kwargs={'pk': self.object.pk})
+            )
+
+
+""" BOOK MODEL VIEW """
+# Creating a BookListView Class for showing the information on the URL - Using Generic View Class
+
+class BookListView(generic.ListView):
+    model = Book
+# Django will select all available Book's Data and Store it to a Variable book_list 
+# Basically: <model_name>_list
+
+class BookDetailView(generic.DetailView):
+    model = Book
+# Django will select all available Book's Data and Store it to a Variable <model_name>.<dictionrary>
+# Basically: <model_name>.datafield
+# DetailView Class is a Dictionary Datatype
+
+class BookCreateView(PermissionRequiredMixin, CreateView):
+    model = Book
+    fields = '__all__'
+    permission_required = 'lms_app.add_book'
+
+class BookUpdate(PermissionRequiredMixin, UpdateView):
+    model = Book
+    fields = '__all__'
+    permission_required = 'lms_app.change_book'
+
+class BookDeleteView(PermissionRequiredMixin, DeleteView):
+    model = Book
+    permission_required = 'lms_app.delete_book'
+
+    success_url = reverse_lazy('books')
+
+""" BookCopy MODEL VIEW """
+class BookCopyUpdate(PermissionRequiredMixin, UpdateView):
+    model = BookCopy
+    fields = ['imprint', 'due_back', 'borrower', 'status', 'book']
+    permission_required = 'lms_app.change_bookcopy'
+
+    success_url = reverse_lazy('books')
+
+class BookCopyCreateView(PermissionRequiredMixin, CreateView):
+    model = BookCopy
+    fields = '__all__'
+    permission_required = 'lms_app.add_bookcopy'
+
+    success_url = reverse_lazy('books')
+
+class BookCopyDeleteView(PermissionRequiredMixin, DeleteView):
+    model = BookCopy
+    permission_required = 'lms_app.delete_bookcopy'
+
+    success_url = reverse_lazy('books')
