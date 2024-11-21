@@ -69,7 +69,7 @@ class Author(models.Model):
     first_name = models.CharField(max_length=200, help_text='Please Enter Author\'s First Name')
     last_name = models.CharField(max_length=200, help_text='Please Enter Author\'s Last Name')
 
-    date_of_birth = models.DateField()
+    date_of_birth = models.DateField(null=True, blank=True)
     date_of_death = models.DateField(null=True, blank=True)
 
     # Functions
