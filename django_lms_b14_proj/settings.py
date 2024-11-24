@@ -37,10 +37,11 @@ SECRET_KEY = os.environ.get(
 # DEBUG = True
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = ['.railway.app','127.0.0.1']
+ALLOWED_HOSTS = ['.railway.app', '.pythonanywhere.com', '127.0.0.1']
 
 # SET SSRF Trusted Origin to allow any apps on Railway and the local testing URL
-CSRF_TRUSTED_ORIGINS = ['http://*.railway.app']
+CSRF_TRUSTED_ORIGINS = ['http://*.railway.app',
+                        'http://*.pythonanywhere.com']
 
 
 # Application definition
@@ -97,17 +98,23 @@ WSGI_APPLICATION = 'django_lms_b14_proj.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         "ENGINE": "django.db.backends.postgresql",      #PostgreSQL Engine Setting
+#         "NAME": "lms_batch14_database_v2",
+#         "USER": "postgres",
+#         "PASSWORD": "admin1111",
+#         "HOST": "localhost",
+#         "PORT": "5432",
+#     }
+# }
+
 DATABASES = {
     'default': {
-        "ENGINE": "django.db.backends.postgresql",      #PostgreSQL Engine Setting
-        "NAME": "lms_batch14_database_v2",
-        "USER": "postgres",
-        "PASSWORD": "admin1111",
-        "HOST": "localhost",
-        "PORT": "5432",
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
