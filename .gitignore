@@ -1,3 +1,12 @@
+# Text Backup Files
+*.bak
+
+# Database
+*.sqlite3
+
+# Critical Environment Value
+.env
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
