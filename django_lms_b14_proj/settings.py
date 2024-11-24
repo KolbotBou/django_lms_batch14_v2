@@ -16,17 +16,31 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+from dotenv import load_dotenv
+
+# Add Support for Env Variable from file if defined
+env_path = load_dotenv(os.path.join(BASE_DIR, '.env'))
+load_dotenv(env_path)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^9@oesa6x&q#kk)dypq6=a-ju$=wcm5v%%*!)$q6qy!+$v5tsc'
+# THIS IS LIKE A PASSWORD FOR THE PROJECT/APP
+# SECRET_KEY = 'django-insecure-^9@oesa6x&q#kk)dypq6=a-ju$=wcm5v%%*!)$q6qy!+$v5tsc'
+SECRET_KEY = os.environ.get(
+    'DJANGO_SECRET_KEY', 'django-insecure-^9@oesa6x&q#kk)dypq6=a-ju$=wcm5v%%*!)$q6qy!+$v5tsc')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# For DEPLOYMENT: DEBUG has to be set to FALSE
+# DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.railway.app','127.0.0.1']
+
+# SET SSRF Trusted Origin to allow any apps on Railway and the local testing URL
+CSRF_TRUSTED_ORIGINS = ['http://*.railway.app']
 
 
 # Application definition
@@ -46,6 +60,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware'    # Add Middleware for WhiteNoise Library
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -128,6 +143,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 STATIC_URL = 'static/'
 
 # Default primary key field type
@@ -138,3 +155,20 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
 # Basically is to Redirect URL to Main URL (Rather than the Django Default URL)
 LOGIN_REDIRECT_URL = '/'
+
+
+import dj_database_url
+
+if 'DATABASE_URL' in os.environ:
+    DATABASES['default'] = dj_database_url.config(
+        conn_max_age=500,
+        conn_health_checks=True,
+    )
+    
+# Static file serving.
+# https://whitenoise.readthedocs.io/en/stable/django.html#add-compression-and-caching-support
+STORAGES = {
+    'staticfiles': {
+        'BACKEND':'whitenoise.storage.CompressManifestStaticFilesStorage',
+    },
+}
